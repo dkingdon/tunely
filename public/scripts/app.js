@@ -1,9 +1,4 @@
-/* CLIENT-SIDE JS
- *
- * You may edit this file as you see fit.  Try to separate different components
- * into functions and objects as needed.
- *
- */
+var template; // Handlebars template variable
 
 
 /* hard-coded data! */
@@ -39,8 +34,17 @@ sampleAlbums.push({
 
 $(document).ready(function() {
   console.log('app.js loaded!');
-});
 
+  /* - - - Handlebars - - - */
+  var source = $('#hb-template-script').html(); // Pulling html structure
+  template = Handlebars.compile(source); // Sending html to compiler
+
+
+  /* - - - Handlebars Continued - - - */
+  var albumResultsHtml = template({sampleAlbums}); // Grabbing data from source and storing it in variable
+  $('#albums').append(albumResultsHtml);
+
+}); //END OF - document ready function
 
 
 
