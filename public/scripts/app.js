@@ -1,4 +1,4 @@
-var template; // Handlebars template variable
+
 
 
 /* hard-coded data! */
@@ -34,15 +34,17 @@ sampleAlbums.push({
 
 $(document).ready(function() {
   console.log('app.js loaded!');
+  // $.get('/api/albums').success(function (albums) {
+  //   albums.forEach(function (album) {
+  //     renderAlbum(album);
+  //   })
+  // })
+    sampleAlbums.forEach(function (e) {
+      renderAlbum(e);
+  });
 
-  /* - - - Handlebars - - - */
-  var source = $('#hb-template-script').html(); // Pulling html structure
-  template = Handlebars.compile(source); // Sending html to compiler
 
 
-  /* - - - Handlebars Continued - - - */
-  var albumResultsHtml = template({sampleAlbums}); // Grabbing data from source and storing it in variable
-  $('#albums').append(albumResultsHtml);
 
 }); //END OF - document ready function
 
@@ -51,6 +53,10 @@ $(document).ready(function() {
 
 // this function takes a single album and renders it to the page
 function renderAlbum(album) {
+  /* - - - Handlebars - - - */
+  var source = $('#hb-template-script').html(); // Pulling html structure
+  var template = Handlebars.compile(source); // Sending html to compiler
+  var albumResultsHtml = template(album); // Grabbing data from source and storing it in variable;
+  $('#albums').prepend(albumResultsHtml); //Inserts templated html on page
   console.log('rendering album:', album);
-
 }
