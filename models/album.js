@@ -1,13 +1,13 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-  var AlblumSchema = new Schema({
+  var AlbumSchema = new Schema({
     artistName: String,
     name: String,
     releaseDate: String,
     genres: [String]
   });
 
-var Album = mongoose.model('Frame', FrameSchema);
+var Album = mongoose.model('Album', AlbumSchema);
 
-model.export = Frame;
+module.exports = Album;
