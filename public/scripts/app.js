@@ -3,24 +3,41 @@
 $(document).ready(function() {
   console.log('app.js loaded!');
 
-  $.ajax({
-    method: 'GET',
-    url: '/api/albums',
-    type: 'json',
-    success: albumGetSuccess,
-    error: function( err ){
-      console.log("there was an error")
-    }
+  $.get('/api/albums').success(function (albums) {
+    albums.forEach(function (album) {
+      renderAlbum(album);
+    })
   })
+      /* - - - this is the long hand way of writing the above script - - - */
+  // $.ajax({
+  //   method: 'GET',
+  //   url: '/api/albums',
+  //   type: 'json',
+  //   success: albumGetSuccess,
+  //   error: function( err ){
+  //     console.log("there was an error")
+  //   }
+  // });
 
-
+  // Gets new album input from form
+  $('#album-form form').on('submit', function (e){ // extra form is needed
+    e.preventDefault();
+    var formData = $(this).serialize();
+    console.log('formData', formData);
+    /* - - - Posts info from form - - - */
+    $.post('/api/albums', formData, function (album) {
+      console.log('album after POST', album); // this logs it on the server, appearing on the node console. 
+      renderAlbum(album);
+    });
+    $(this).trigger('reset'); // Resets form after submit without reloading page
+  });
 
 
 }); //END OF - document ready function
 
 function albumGetSuccess (json){
   var receivedAlbums = json;
-  console.log(receivedAlbums);
+  // console.log(receivedAlbums);
   receivedAlbums.forEach(function renderOneAlbum (album) {
     renderAlbum(album);
   });
