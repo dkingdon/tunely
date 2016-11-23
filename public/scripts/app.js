@@ -26,7 +26,7 @@ $(document).ready(function() {
     console.log('formData', formData);
     /* - - - Posts info from form - - - */
     $.post('/api/albums', formData, function (album) {
-      console.log('album after POST', album); // this logs it on the server, appearing on the node console. 
+      console.log('album after POST', album); // this logs it on the server, appearing on the node console.
       renderAlbum(album);
     });
     $(this).trigger('reset'); // Resets form after submit without reloading page

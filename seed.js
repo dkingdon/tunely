@@ -42,13 +42,30 @@ var albumsList =[
  }
 ];
 
-db.Album.remove({}, function(err, albums){
+  /* - - -Sample Song Data - - - */
+  var sampleSongs = [];
+    sampleSongs.push({ name: 'Swamped', trackNumber: 1 });
+    sampleSongs.push({ name: "Heaven's a Lie", trackNumber: 2 });
+    sampleSongs.push({ name: 'Daylight Dancer', trackNumber: 3 });
+    sampleSongs.push({ name: 'Humane', trackNumber: 4 });
+    sampleSongs.push({ name: 'Self Deception', trackNumber: 5 });
+    sampleSongs.push({ name: 'Aeon', trackNumber: 6 });
+    sampleSongs.push({ name: 'Tight Rope', trackNumber: 7 });
 
-  db.Album.create(albumsList, function(err, albums){
-    if (err) { return console.log('ERROR', err); }
-    console.log("all albums:", albums);
-    console.log("created", albums.length, "albums");
-    process.exit();
+
+    /* - - -Polulates each Album song list - - - */
+    albumsList.forEach( function( album ) {
+      album.songs = sampleSongs;
+    });
+
+
+    db.Album.remove({}, function(err, albums){
+
+      db.Album.create(albumsList, function(err, albums){
+        if (err) { return console.log('ERROR', err); }
+        console.log("all albums:", albums);
+        console.log("created", albums.length, "albums");
+        process.exit();
+      });
+
   });
-
-});
