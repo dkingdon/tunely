@@ -27,9 +27,13 @@ var db = require('../models');
       res.json(album);
     })
   }
-
+  // This shows the new song ?? NOTE: could be wrong. Part of sprint 3: step 7.
   function show(req, res) {
-    // FILL ME IN !
+    db.Album.findById(req.params.albumId, function( err, foundAlbum) {
+      if (err);
+        console.log('albumsController.show responded with', foundAlbum);
+        res.json(foundAlbum);
+    });
   }
 
   function destroy(req, res) {

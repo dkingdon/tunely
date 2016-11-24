@@ -32,8 +32,64 @@ $(document).ready(function() {
     $(this).trigger('reset'); // Resets form after submit without reloading page
   });
 
+    // modal click event handler for add song
+    $('#albums').on('click', '.add-song', handleAddSongClick);
+
+    //save song modal save button
+    $('#saveSong').on('click', handleNewSongSubmit);
+
 
 }); //END OF - document ready function
+
+  // Handle click event add song button - sprint 3
+  function handleAddSongClick(e) {
+    console.log('add-song clicked');
+      // looks for the closest instance of .album and grabs the data. this is important to keep in mind when using handlbars because handlebars makes multiple instances of each section. this is how you identify a single one
+    var currentAlbumId = $(this).closest('.album').data('album-id');
+    console.log("id =", currentAlbumId );
+      //Setting data id attribute to modal
+    $('#songModal').data('album-id', currentAlbumId);
+    $('#songModal').modal();
+  };
+
+  // Handles new song modal submit
+  function handleNewSongSubmit(e) {
+    e.preventDefault();
+      //finds modal fields
+    var $modal = $('#songModal');
+    var $songNameField = $modal.find('#songName');
+    var $trackNumberField = $modal.find('#trackNumber');
+
+      // gets data from modal fields
+      // note: the server expects keys to be 'name' & 'trackNumber'.
+    var dataToPost = {
+      name: $songNameField.val(),
+      trackNumber: $trackNumberField.val()
+    };
+
+    var albumId = $modal.data('albumId');
+    console.log('retrieved songName:', songName, ' and trackNumber ', trackNumber, ' for album id: ', albumId);
+    // POST's to server
+    var songPostToServerUrl = '/api/albums/' + albumId + '/songs';
+    $.post(songPostToServerUrl, dataToPost, function(data) {
+      // Clears form
+      $songNameField.val('');
+      $trackNumberField.val('');
+
+      //close modal
+      $modal.modal('hide');
+      // update the current instance of the album from page
+      $.get('/api/albums/' + albumId, function(data) {
+        // removes current instance of the album from the page
+        $('[data-album-id=' + albumId + ']').remove();
+        // rerender it with new album data (including songs)
+        renderAlbum(data);
+      });
+    }).error(function(err) {
+      console.log('post to /api/albums/:albumId/song resulted in error', err);
+    });
+  }
+
 
 function albumGetSuccess (json){
   var receivedAlbums = json;
