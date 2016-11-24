@@ -37,7 +37,13 @@ var db = require('../models');
   }
 
   function destroy(req, res) {
-    // FILL ME IN !
+    console.log(req.body);
+    db.Album.findOneAndRemove({ _id: req.params.albumId }, function ( err, foundAlbum) {
+      if (err) {
+        console.log('deleting album controller failed', err);
+      }
+      res.json(foundAlbum);
+    })
   }
 
   function update(req, res) {

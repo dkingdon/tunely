@@ -32,14 +32,35 @@ $(document).ready(function() {
     $(this).trigger('reset'); // Resets form after submit without reloading page
   });
 
-    // modal click event handler for add song
+    // modal click event handler for add song sprint 4
     $('#albums').on('click', '.add-song', handleAddSongClick);
 
-    //save song modal save button
+    //save song modal save button sprint 3
     $('#saveSong').on('click', handleNewSongSubmit);
 
+    //Delete button Sptrint 4
+    $('#albums').on('click', '.delete-album', handleDeleteAlbumClick);
 
 }); //END OF - document ready function
+
+  //Delete button onclick function sprint 4.
+  function handleDeleteAlbumClick(e) {
+    console.log('The delete button was pressed')
+    // looks for the closest parent which is .albums and grabs the data which is the ID here
+    var albumId = $(this).parents('.album').data('album-id');
+    console.log('album id = ', albumId);
+    $.ajax({
+      url: '/api/albums/' + albumId,
+      method: 'DELETE',
+      success: handleDeleteAlbumSuccess
+    })
+  }
+
+  function handleDeleteAlbumSuccess (data) {
+    var deletedAlbumId = data._id;
+    console.log('removing the folling album: ', deletedAlbumId);
+    $('div[data-album-id= ' +deletedAlbumId + ']').remove();
+  }
 
   // Handle click event add song button - sprint 3
   function handleAddSongClick(e) {
