@@ -35,7 +35,7 @@ var db = require('../models');
         res.json(foundAlbum);
     });
   }
-
+  // sprint 4
   function destroy(req, res) {
     console.log(req.body);
     db.Album.findOneAndRemove({ _id: req.params.albumId }, function ( err, foundAlbum) {
@@ -46,8 +46,23 @@ var db = require('../models');
     })
   }
 
+  // sprint 5
   function update(req, res) {
-    // FILL ME IN !
+    console.log('updating with data', req.body);
+    db.Album.findById(req.params.albumId, function (err, foundAlbum) {
+      if(err) {
+        console.log('albumnsController.update error', err);
+      }
+      foundAlbum.artistName = req.body.artistName;
+      foundAlbum.name = req.body.name;
+      foundAlbum.releaseDate = req.body.releaseDate;
+      foundAlbum.save(function (err, savedAlbum) {
+        if (err) {
+          console.log('saving edited album failed');
+        }
+        res.json(savedAlbum);
+      });
+    });
   }
 
 

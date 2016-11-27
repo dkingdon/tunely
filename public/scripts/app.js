@@ -41,7 +41,67 @@ $(document).ready(function() {
     //Delete button Sptrint 4
     $('#albums').on('click', '.delete-album', handleDeleteAlbumClick);
 
+    // Edit album & save. Sprint 5
+    $('#albums').on('click', '.edit-album', handleEditAlbumClick);
+    $('#albums').on('click', '.save-album', handleSaveChangesClick);
+
 }); //END OF - document ready function
+
+    // Edit button handler sprint 5.
+  function handleEditAlbumClick (e) {
+    console.log('edit album button was pressed');
+    var $albumRow = $(this).closest('.album');
+    var albumId = $albumRow.data('album-id');
+    console.log('album id: ', albumId);
+
+    // shows save changes button note: needs to be hidden in html
+    $albumRow.find('.save-album').toggleClass('hidden');
+    // hides the edit button
+    $albumRow.find('.edit-album').toggleClass('hidden');
+
+    //get the album name and replaces ots field with input eleement.
+    var albumName = $albumRow.find('span.album-name').text();
+    $albumRow.find('span.album-name').html('<input class="edit-album-name" value="' + albumName +  '"></input>');
+
+    // Gets artist name and replaced its field with an input eleement
+    var artistName = $albumRow.find('span.artist-name').text()
+    $albumRow.find('span.artist-name').html('<input class="edit-artist-name" value="' + artistName + '"></input>');
+
+    // Gets the release date and replaces its field with an input eleement
+    var releaseDate = $albumRow.find('span.album-releaseDate').text();
+    $albumRow.find('span.album-releaseDate').html('<input class="edit-album-releaseDate" value="' + releaseDate + '"></input>')
+  }
+
+  // save changes handler string 5.
+  function handleSaveChangesClick(e) {
+    var albumId = $(this).parents('.album').data('album-id');
+    var $albumRow = $('[data-album-id=' + albumId + ']');
+
+    //gets data in fields note, need to make sure naming cnventions of the models are honored.
+    var data = {
+      name: $albumRow.find('.edit-album-name').val(),
+      artistName: $albumRow.find('.edit-artist-name').val(),
+      releaseDate: $albumRow.find('.edit-album-releaseDate').val()
+    };
+    console.log('PUTing data for album', albumId, 'with data', data);
+
+    $.ajax({
+      method: 'PUT',
+      url: '/api/albums/' + albumId,
+      data: data,
+      success: handleAlbumUpdateResponse
+    });
+  }
+    // handles update response sprint 5
+  function handleAlbumUpdateResponse(data) {
+      console.log('response to date', data);
+      var albumId = data._id;
+      //scratch this album from page
+      $('[data-album-id=' + albumId + ']').remove();
+      // and then re-draw it with the updates
+      renderAlbum(data);
+    }
+
 
   //Delete button onclick function sprint 4.
   function handleDeleteAlbumClick(e) {
